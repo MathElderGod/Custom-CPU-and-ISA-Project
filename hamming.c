@@ -11,11 +11,6 @@ void clearInputBuffer(void);
 int binaryStringToBinary(char *binaryString);
 void calculateParities(unsigned int binaryNumber, char *p0, char *p1, char *p2,
                        char *p4, char *p8);
-char calcP0(unsigned int binaryNumber);
-char calcP1(unsigned int binaryNumber);
-char calcP2(unsigned int binaryNumber);
-char calcP4(unsigned int binaryNumber);
-char calcP8(unsigned int binaryNumber);
 
 // Main function
 int main(void) {
