@@ -107,11 +107,6 @@ void clearInputBuffer() {
 
 void detectHammingError(char *binaryString, char p0, char p1, char p2, char p4,
                         char p8) {
-    char noneParityString[12] = {
-        binaryString[0], binaryString[1],  binaryString[2],  binaryString[3],
-        binaryString[4], binaryString[5],  binaryString[6],  binaryString[8],
-        binaryString[9], binaryString[10], binaryString[12], '\0'};
-
     int parityPositions[5] = {7, 11, 13, 14, 15};
     char parities[5] = {p8, p4, p2, p1, p0};
     int size = sizeof(parityPositions) / sizeof(parityPositions[0]);
@@ -129,12 +124,22 @@ void detectHammingError(char *binaryString, char p0, char p1, char p2, char p4,
         // if p0 looks good, and we have no mismatched parities, then we have no
         // errors
         if (mismatchedParities == 0) {
+            char noneParityString[12] = {
+                binaryString[0],  binaryString[1],  binaryString[2],
+                binaryString[3],  binaryString[4],  binaryString[5],
+                binaryString[6],  binaryString[8],  binaryString[9],
+                binaryString[10], binaryString[12], '\0'};
             printf("No Errors Detected: ");
             char resultString[17] = "00000";
             strcat(resultString, noneParityString);
             printf("%s\n", resultString);
             // else we have a two bit error
         } else {
+            char noneParityString[12] = {
+                binaryString[0],  binaryString[1],  binaryString[2],
+                binaryString[3],  binaryString[4],  binaryString[5],
+                binaryString[6],  binaryString[8],  binaryString[9],
+                binaryString[10], binaryString[12], '\0'};
             printf("Two Bit Error Detected: ");
             char resultString[17] = "10000";
             strcat(resultString, noneParityString);
@@ -142,50 +147,51 @@ void detectHammingError(char *binaryString, char p0, char p1, char p2, char p4,
         }
         // p0 looks bad, time to determine if p0, or something else
     } else {
-        for (int i = 0; i < size - 1; i++) {
-            if (binaryString[parityPositions[i]] != parities[i]) {
-                mismatchedParities++;
-            }
-        }
+        int p0Calculated = p0 == '1' ? 1 : 0;
+        int p1Calculated = p1 == '1' ? 1 : 0;
+        int p2Calculated = p2 == '1' ? 1 : 0;
+        int p4Calculated = p4 == '1' ? 1 : 0;
+        int p8Calculated = p8 == '1' ? 1 : 0;
+
+        int p0Received = binaryString[15] == '1' ? 1 : 0;
+        int p1Received = binaryString[14] == '1' ? 1 : 0;
+        int p2Received = binaryString[13] == '1' ? 1 : 0;
+        int p4Received = binaryString[11] == '1' ? 1 : 0;
+        int p8Received = binaryString[7] == '1' ? 1 : 0;
+
+        unsigned int incorrectPosition = 0;
+        incorrectPosition =
+            (incorrectPosition << 1) | (p8Calculated ^ p8Received);
+        incorrectPosition =
+            (incorrectPosition << 1) | (p4Calculated ^ p4Received);
+        incorrectPosition =
+            (incorrectPosition << 1) | (p2Calculated ^ p2Received);
+        incorrectPosition = (incorrectPosition) | (p1Calculated ^ p1Received);
+        incorrectPosition = 15 - incorrectPosition;
+        printf("bit position: %i: \n", incorrectPosition);
         // if all other parities are good, then p0 is bad
-        if (mismatchedParities == 0) {
+        if (incorrectPosition == 0) {
+            char noneParityString[12] = {
+                binaryString[0],  binaryString[1],  binaryString[2],
+                binaryString[3],  binaryString[4],  binaryString[5],
+                binaryString[6],  binaryString[8],  binaryString[9],
+                binaryString[10], binaryString[12], '\0'};
             printf("One Bit Error Detected: ");
             char resultString[17] = "01000";
             strcat(resultString, noneParityString);
             printf("%s\n", resultString);
             // calculate which bit is bad
         } else {
-            int p0Calculated = p0 == '1' ? 1 : 0;
-            int p1Calculated = p1 == '1' ? 1 : 0;
-            int p2Calculated = p2 == '1' ? 1 : 0;
-            int p4Calculated = p4 == '1' ? 1 : 0;
-            int p8Calculated = p8 == '1' ? 1 : 0;
-
-            int p0Received = binaryString[15] == '1' ? 1 : 0;
-            int p1Received = binaryString[14] == '1' ? 1 : 0;
-            int p2Received = binaryString[13] == '1' ? 1 : 0;
-            int p4Received = binaryString[11] == '1' ? 1 : 0;
-            int p8Received = binaryString[7] == '1' ? 1 : 0;
-
-            unsigned int incorrectPosition = 0;
-            incorrectPosition =
-                (incorrectPosition << 1) | (p8Calculated ^ p8Received);
-            incorrectPosition =
-                (incorrectPosition << 1) | (p4Calculated ^ p4Received);
-            incorrectPosition =
-                (incorrectPosition << 1) | (p2Calculated ^ p2Received);
-            incorrectPosition =
-                (incorrectPosition) | (p1Calculated ^ p1Received);
-            printf("bit position: %i: \n", incorrectPosition);
             // one bit error if non zero
             printf("One Bit Error Detected: ");
             char resultString[17] = "01000";
-            if (incorrectPosition != 7 && incorrectPosition != 11 &&
-                incorrectPosition != 13 && incorrectPosition != 14 &&
-                incorrectPosition != 15) {
-                noneParityString[incorrectPosition] =
-                    noneParityString[incorrectPosition] == '1' ? '0' : '1';
-            }
+            binaryString[incorrectPosition] =
+                (binaryString[incorrectPosition] == '1') ? '0' : '1';
+            char noneParityString[12] = {
+                binaryString[0],  binaryString[1],  binaryString[2],
+                binaryString[3],  binaryString[4],  binaryString[5],
+                binaryString[6],  binaryString[8],  binaryString[9],
+                binaryString[10], binaryString[12], '\0'};
             strcat(resultString, noneParityString);
             printf("%s\n", resultString);
         }
