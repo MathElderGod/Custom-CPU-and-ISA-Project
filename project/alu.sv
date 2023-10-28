@@ -6,14 +6,12 @@ module alu(
             output logic[7:0]   result,
             output logic        zero                   // NOR (output)
 );
-
     // constants predefined with our insturction set 
     localparam xorIns  = 3'b000;
     localparam beqIns  = 3'b001;
     localparam addiIns = 3'b010;
     localparam andiIns = 3'b011;
     localparam rlsIns  = 3'b100;
-
     always_comb begin 
         result = 8'b0;              
         zero   = (result == 8'b00000000);
@@ -42,7 +40,6 @@ module alu(
                 3'b111: result = {input1[0],   input1[7:1]};    // 7-bit rotate-left
                 default:
                     result = input1;
-                
             endcase
         // the instruction is not supported
         default:
