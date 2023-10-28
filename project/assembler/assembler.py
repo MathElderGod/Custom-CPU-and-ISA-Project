@@ -44,22 +44,7 @@ def assemble(instr):
     else:
         target = tokens[1]
         return opcode + target
-
-"""
-Maps opcode to binary representation
-"""
-def get_opcode(operation):
-    hmap = {
-        "xor": "000",
-        "beq": "001",
-        "add": "010",
-        "lsl": "011",
-        "ld": "101",
-        "st": "110",
-        "j": "111"
-    }
-    return hmap[operation]
-
+    
 """
 Supports decoding of registers and immediate values.
 """
