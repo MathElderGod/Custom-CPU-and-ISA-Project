@@ -10,41 +10,40 @@ st                     |  I   | 110    | XX   | -    | XX   | XX     | -
 j                      |  J   | 111    | -    | -    | -    | -      | XXXXXX
 """
 
+INSTRUCTION_FORMAT = {
+    "xor": {"type": "R", "opcode": "000", "width": 3},
+    "beq": {"type": "I", "opcode": "001", "width": 2},
+    "add": {"type": "I", "opcode": "010", "width": 3},
+    "lsl": {"type": "I", "opcode": "011", "width": 3},
+    "ld":  {"type": "I", "opcode": "101", "width": 2},
+    "st":  {"type": "I", "opcode": "110", "width": 2},
+    "j":   {"type": "J", "opcode": "111", "width": 6}
+}
+
 def assemble(instr):
-    r_types = set(["xor"])
-    i_types = set(["beq", "add", "lsl", "ld", "st"])
-    j_types = set(["j"])
-    
-    # Get the operation of the current instruction
     tokens = instr.replace(",", "").split()
     op = tokens[0]
-
+    opcode = INSTRUCTION_FORMAT[op]["opcode"]
+    width = INSTRUCTION_FORMAT[op]["width"]
+    
     # R-Type Instruction
-    if op in r_types:
-        # Parse rs and rt
+    if INSTRUCTION_FORMAT[op]["type"] == "R":
         rs, rt = tokens[1], tokens[2]
-        # Form instruction
-        return get_opcode(op) + get_code(rs, 3) + get_code(rt, 3)
+        return opcode + get_code(rs, width) + get_code(rt, width)
     
     # I-Type Instructions
-    elif op in i_types:
-        # 2-bit imm case
+    elif INSTRUCTION_FORMAT[op]["type"] == "I":
         if op in ["beq", "ld", "st"]:
-            width = 2
             rs, rd, imm = tokens[1], tokens[2], tokens[3]
-            return get_opcode(op) + get_code(rs, width) + get_code(rd, width) + get_code(imm, width)
-        
-        # 3 bit imm case
+            return opcode + get_code(rs, width) + get_code(rd, width) + get_code(imm, width)
         else:
-            width = 3
             rs, imm = tokens[1], tokens[2]
-            return get_opcode(op) + get_code(rs, width) + get_code(imm, width)
+            return opcode + get_code(rs, width) + get_code(imm, width)
     
     # J-type 
     else:
-        width = 6
         target = tokens[1]
-        return get_opcode(op) + target
+        return opcode + target
 
 """
 Maps opcode to binary representation
