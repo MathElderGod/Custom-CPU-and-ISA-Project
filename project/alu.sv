@@ -12,7 +12,6 @@ module alu(
     localparam addiIns = 3'b010;
     localparam andiIns = 3'b011;
     localparam rlsIns  = 3'b100;
-
     always_comb begin
         zero          = (result == 8'b00000000);
         case(instruction)
@@ -45,6 +44,5 @@ module alu(
             default:
                     result = 8'b11111111;
         endcase
-		
     end
 endmodule
