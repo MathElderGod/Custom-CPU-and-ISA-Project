@@ -15,7 +15,7 @@ module alu(
     localparam rlsIns  = 3'b100;
 
     always_comb begin 
-        result = 'b0;              
+        result = 8'b0;              
         zero   = !(result == 8'b00000000);
         case(instruction)
         // bitwise xor
