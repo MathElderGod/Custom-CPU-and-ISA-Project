@@ -16,7 +16,7 @@ module alu(
 
     always_comb begin 
         result = 8'b0;              
-        zero   = !(result == 8'b00000000);
+        zero   = (result == 8'b00000000);
         case(instruction)
         // bitwise xor
         xorIns: 
