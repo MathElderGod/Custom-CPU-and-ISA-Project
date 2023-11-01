@@ -1,6 +1,6 @@
 // Program Counter
 
-module pc #(parameter D=6)(
+module pc #(parameter D=10)(
                             input                 reset,		 // synchronous reset
                                                   clk,       
                                                   jumpEn,   // abs. jump enable
