@@ -11,7 +11,7 @@ module alu(
     localparam beqIns  = 3'b001;
     localparam addiIns = 3'b010;
     localparam andiIns = 3'b011;
-    localparam rlsIns  = 3'b100;
+    localparam lsIns  = 3'b100;
     always_comb begin
         zero          = (result == 8'b00000000);
         case(instruction)
@@ -27,18 +27,17 @@ module alu(
             // bitwise and
             andiIns:
                 result = input1 & input2;
-            // rotate left shift, (will rotate the bits, meaning no loss of data)
-            rlsIns:
-                case(input2[2:0]) // considering only 3 LSBs of input2 for rotation amount
-                    3'b001: result = {input1[6:0], input1[7]};      // 1-bit rotate-left
-                    3'b010: result = {input1[5:0], input1[7:6]};    // 2-bit rotate-left
-                    3'b011: result = {input1[4:0], input1[7:5]};    // 3-bit rotate-left
-                    3'b100: result = {input1[3:0], input1[7:4]};    // 4-bit rotate-left
-                    3'b101: result = {input1[2:0], input1[7:3]};    // 5-bit rotate-left
-                    3'b110: result = {input1[1:0], input1[7:2]};    // 6-bit rotate-left
-                    3'b111: result = {input1[0],   input1[7:1]};    // 7-bit rotate-left
+            // logical shift
+            lsIns:
+                case(input2[2:0]) // considering only 3 LSBs of input2
+                    3'b001: result = input1 >> 1;    // 1-bit shift-right
+                    3'b010: result = input1 >> 2;    // 2-bit shift-right
+                    3'b011: result = input1 >> 3;    // 3-bit shift-right
+                    3'b101: result = input1 << 3;    // 3-bit shift-left
+                    3'b110: result = input1 << 2;    // 2-bit shift-left
+                    3'b111: result = input1 << 1;    // 1-bit shift-left
                     default:
-                        result = input1;
+                        result = input1;    // unsupported logical shift
                 endcase
             // the instruction is not supported
             default:
