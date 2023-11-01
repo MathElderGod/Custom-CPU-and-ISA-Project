@@ -69,97 +69,96 @@ module alu_tb;  // this is a testbench
 
 		#100; // waits for 100 time units
 
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000111;
 		// zero flag should be low
-		// result should hold 8'b11001000, as you shifted all bits 7 times to the left on rotation
+		// result should hold 8'b00100010, as you shift 1 time to the left
 
 		#100; // waits for 100 time units
 
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000110;
 		// zero flag should be low
-		// result should hold 8'b01100100, as you shifted the bit 6 times to the left on rotation
+		// result should hold 8'b01000100, as you shifted 2 times to the left
 
 		#100; // waits for 100 time units
 
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000101;
 		// zero flag should be low
-		// result should hold 8'b00110010, as you shifted the bit 5 times to the left on rotation
+		// result should hold 8'b10001000, as you shifted 3 times to the left
 
 		#100; // waits for 100 time units
 
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000100;
 		// zero flag should be low
-		// result should hold 8'b00011001, as you shifted the bit 4 times to the left on rotation
+		// result should hold 8'b10010001, as it is unsupported
 
 		#100; // waits for 100 time units
 
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000011;
 		// zero flag should be low
-		// result should hold 8'b10001100, as you shifted the bit 3 times to the left on rotation
+		// result should hold 8'b00010010, as you shifted 3 times to the right
 
 		#100; // waits for 100 time units
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000010;
 		// zero flag should be low
-		// result should hold 8'b01000110, as you shifted the bit 2 times to the left on rotation
+		// result should hold 8'b00100100, as you shifted 2 times to the right
 
 		#100; // waits for 100 time units
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000001;
 		// zero flag should be low
-		// result should hold 8'b00100011, as you shifted the bit 1 times to the left on rotation
+		// result should hold 8'b01001000, as you shifted 1 time to the right
 
 		#100; // waits for 100 time units
-		// test the RSL ins
+		// test the LS ins
 		instruction = 3'b100;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000000;
 		// zero flag should be low
-		// result should hold 8'b10010001, as you shifted the bit 0 times to the left on rotation
-
+		// result should hold 8'b10010001, as it is unsupported
 
 		#100; // waits for 100 time units
-		// test the RSL ins
+		// test unsupported instructions
 		instruction = 3'b101;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000000;
 		// zero flag should be low
-		// result should hold 8'b11111111, as you shifted the bit 0 times to the left on rotation
+		// result should hold 8'b11111111, as it is unsupported
 
 		#100; // waits for 100 time units
-		// test the RSL ins
+		// test unsupported instructions
 		instruction = 3'b110;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000000;
 		// zero flag should be low
-		// result should hold 8'b11111111, as you shifted the bit 0 times to the left on rotation
+		// result should hold 8'b11111111, as it is unsupported
 
 		#100; // waits for 100 time units
-		// test the RSL ins
+		// test unsupported instructions
 		instruction = 3'b111;
 		input1 		= 8'b10010001;
 		input2      = 8'b00000000;
 		// zero flag should be low
-		// result should hold 8'b11111111, as you shifted the bit 0 times to the left on rotation
+		// result should hold 8'b11111111, as it is unsupported
 
 		#100; // waits for 100 time units
 
