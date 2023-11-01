@@ -13,7 +13,7 @@ module control #(parameter opwidth = 3, mcodebits = 3)(
   localparam beqIns  = 3'b001;
   localparam addiIns = 3'b010;
   localparam andiIns = 3'b011;
-  localparam rlsIns  = 3'b100;
+  localparam lsIns  = 3'b100;
   localparam ldIns   = 3'b101;
   localparam stIns   = 3'b110;
   localparam jIns    = 3'b111;
@@ -45,7 +45,7 @@ module control #(parameter opwidth = 3, mcodebits = 3)(
         aluSrc 	  =	'b1;   // 1: immediate  0: second reg file output 
         aluOp	    = 'b011; // default jump instruction fed into the ALU. 
       end
-      rlsIns:  begin					// rsl op
+      lsIns:  begin					// ls op
         aluSrc 	  =	'b1;   // 1: immediate  0: second reg file output 
         aluOp	    = 'b100; // default jump instruction fed into the ALU. 
       end
