@@ -1,17 +1,17 @@
 module pc_tb;
 
   // Parameters
-  parameter D = 6;
+  parameter D = 10;
 
   // Signals
   reg          reset;
   reg          clk;
-  reg          jump_en;
+  reg          jumpEn;
   reg  [D-1:0] target;
-  wire [D-1:0] prog_ctr;
+  wire [D-1:0] programCounter;
 
   // Instantiate the PC
-  pc #(D) test(.reset(reset), .clk(clk), .jump_en(jump_en), .target(target), .prog_ctr(prog_ctr));
+  pc #(D) test(.reset(reset), .clk(clk), .jumpEn(jumpEn), .target(target), .programCounter(programCounter));
 
   // Clock generator
   always begin
@@ -23,7 +23,7 @@ module pc_tb;
     // Initialize signals
     clk = 1;
     reset = 1;
-    jump_en = 0;
+    jumpEn = 0;
     target = 0;
     #10;
     
@@ -35,12 +35,12 @@ module pc_tb;
     #40;
 
     // Enable jump
-    jump_en = 1;
-    target = 5;
+    jumpEn = 1;
+    target = 11;
     #10;
 
     // Disable jump and count
-    jump_en = 0;
+    jumpEn = 0;
 
     #30;
 
