@@ -7,7 +7,7 @@ xor                    |  R   | 000    | XXX  | XXX  | -    | -      | -
 beq                    |  I   | 001    | XX   | -    | XX   | XX     | -
 addi                   |  I   | 010    | XXX  | -    | -    | XXX    | -
 andi                   |  I   | 011    | XXX  | -    | -    | XXX    | -
-rls                    |  I   | 100    | XXX  | -    | -    | XXX    | -
+ls                     |  I   | 100    | XXX  | -    | -    | XXX    | -
 ld                     |  I   | 101    | XX   | -    | XX   | XX     | -
 st                     |  I   | 110    | XX   | -    | XX   | XX     | -
 j                      |  J   | 111    | -    | -    | -    | -      | XXXXXX
@@ -18,10 +18,20 @@ INSTRUCTION_FORMAT = {
     "beq": {"type": "I", "opcode": "001", "width": 2},
     "addi": {"type": "I", "opcode": "010", "width": 3},
     "andi": {"type": "I", "opcode": "011", "width": 3},
-    "rls": {"type": "I", "opcode": "100", "width": 3},
+    "ls": {"type": "I", "opcode": "100", "width": 3},
     "ld":  {"type": "I", "opcode": "101", "width": 2},
     "st":  {"type": "I", "opcode": "110", "width": 2},
     "j":   {"type": "J", "opcode": "111", "width": 6}
+}
+
+TWOS_COMP = {
+    '0': '000',
+    '1': '001',
+    '2': '010',
+    '3': '011',
+    '-3':'101',
+    '-2': '110',
+    '-1': '111'
 }
 
 # Clean up instruction
@@ -53,8 +63,14 @@ def assemble_i_type(tokens, opcode, width):
         rd, imm = tokens[2], tokens[3]
         return opcode + decode_value(rs, width) + decode_value(rd, width) + decode_value(imm, width)
     else:
-        imm = tokens[2]
-        return opcode + decode_value(rs, width) + decode_value(imm, width)
+        if opcode == INSTRUCTION_FORMAT["ls"]["opcode"]:
+            imm = tokens[2]
+            try: return opcode + decode_value(rs, width) + TWOS_COMP[imm]
+            except: return opcode + decode_value(rs, width) + '000'
+            
+        else:
+            imm = tokens[2]
+            return opcode + decode_value(rs, width) + decode_value(imm, width)
 
 # Process J-Type
 def assemble_j_type(tokens, opcode):
@@ -87,7 +103,14 @@ def test_assembler():
         ("beq r1 r0 2", "001010010"),
         ("addi r0 1", "010000001"),
         ("andi r0 1", "011000001"),
-        ("rls r0 2", "100000010"),
+        ("ls r0 -4", "100000000"),
+        ("ls r0 -3", "100000101"),
+        ("ls r0 -2", "100000110"),
+        ("ls r0 -1", "100000111"),
+        ("ls r0 0", "100000000"),
+        ("ls r0 1", "100000001"),
+        ("ls r0 2", "100000010"),
+        ("ls r0 3", "100000011"),
         ("ld r0 r1 0", "101000100"),
         ("st r0 r1 0", "110000100"),
         ("j 000000", "111000000"),
@@ -126,10 +149,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.test:
-        try:
-            test_assembler()
-            print("All tests passed.")
-        except AssertionError as e:
-            print(f"Test Failed: {str(e)}")
+        try: test_assembler()
+        except AssertionError as e: print(f"Test Failed: {str(e)}")
     else: 
         process_file("assembly.txt", "mach_code.txt")
