@@ -62,6 +62,8 @@ always @(*) begin
     endcase
 end
 
+assign jumpEn = (zeroFlag && (aluOpSignal == 3'b001)) || (aluOpSignal == 3'b111);
+
 // program counter module // D sets program counter width
 pc #(.D(D)) pc1(
                 .reset(reset),                      // input
@@ -122,12 +124,6 @@ data_mem dm1 (
                 .dataOutput(dataMemoryOutput)   // output
 
 );
-// IN PROGRESS.....
-
-// registered flags from ALU
-  always_ff @(posedge clk) begin
-	  zeroFlag <= 0;
-  end
   // can be a ternary string assign done = (programCounter == program1size) ? 1 : ((programCounter == program2size ? 1: (programCounter == program2size) ? 1: 0);
   assign done =  (programCounter == 400) ? 1 : ( (programCounter == 800) ? 1 : ((programCounter == 450) ? 1: 0));
 endmodule
