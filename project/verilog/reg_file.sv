@@ -28,5 +28,5 @@ always_ff @(posedge clk)
 	// else if the write enable signal is high
 	else if(writeEn)				   // anything but stores or no ops
 		// then write the data input into the specified register
-    	core[writeAddress] <= dataInput; 
+    		core[writeAddress] <= dataInput; 
 endmodule
