@@ -63,7 +63,7 @@ def assemble_i_type(tokens, opcode, width):
         rd, imm = tokens[2], tokens[3]
         return opcode + decode_value(rs, width) + decode_value(rd, width) + decode_value(imm, width)
     else:
-        if opcode == INSTRUCTION_FORMAT["ls"]["opcode"]:
+        if (opcode == INSTRUCTION_FORMAT["ls"]["opcode"]) | (opcode == INSTRUCTION_FORMAT["addi"]["opcode"]):
             imm = tokens[2]
             try: return opcode + decode_value(rs, width) + TWOS_COMP[imm]
             except: return opcode + decode_value(rs, width) + '000'
