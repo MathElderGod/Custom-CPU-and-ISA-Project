@@ -79,9 +79,8 @@ def assemble_i_type(tokens, opcode, width):
             return opcode + decode_value(rs, width) + decode_value(imm, width)
 
 # Process J-Type
-def assemble_j_type(tokens, opcode):
+def assemble_j_type(tokens, opcode, width):
     target = tokens[1]
-    width = INSTRUCTION_FORMAT["j"]["width"]
     return opcode + decode_value(target, width)
 
 # Convert assembly into machine code
@@ -96,7 +95,7 @@ def assemble_instruction(instruction):
     
         if op_info["type"] == "R": return assemble_r_type(tokens, opcode, width)
         elif op_info["type"] == "I": return assemble_i_type(tokens, opcode, width)
-        else: return assemble_j_type(tokens, opcode)
+        else: return assemble_j_type(tokens, opcode, width)
         
     except Exception as e:
         raise ValueError(f"Failed to assemble instruction '{instruction}': {str(e)}")
@@ -120,7 +119,7 @@ def test_assembler():
         ("ld r0 r1", "101000001"),
         ("st r0 r1", "110000001"),
         ("j 000000", "111000000"),
-        ("j 111111", "111111111")
+        ("j 20", "111010100")
     ]
 
     for instr, expected in test_data:
