@@ -36,7 +36,7 @@ TWOS_COMP = {
 
 # Clean up instruction
 def tokenize_instruction(instruction):
-    return instruction.replace(",", "").split()
+    return instruction.split('//')[0].strip().split()
 
 # Convert register or imm into binary
 def decode_value(value, width):
@@ -105,6 +105,7 @@ def assemble_instruction(instruction):
 def test_assembler():
     test_data = [
         ("xor r0 r1", "000000001"),
+        ("xor r0 r1", "000000001"),
         ("beq r1 0 15", "001101111"),
         ("addi r0 1", "010000001"),
         ("andi r0 1", "011000001"),
@@ -141,7 +142,7 @@ def process_file(input_filename, output_filename):
     
         with open(output_filename, 'w') as outfile:
             for code, instr in zip(machine_codes, instructions):
-                outfile.write(f"{code} \t// {instr.strip()}\n")
+                outfile.write(f"{code} \t// {instr.split('//')[0].strip()}\n")
                 
     except FileNotFoundError:
         print(f"Error: File '{input_filename}' not found.")

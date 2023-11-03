@@ -1,10 +1,10 @@
-addi r0 1
-addi r0 2
-addi r0 -1
-addi r0 -2
-addi r0 2
-st r0 r1
-ld r2 r1
+addi r0 1 // these are comments
+addi r0 2 // these are comments
+addi r0 -1 // these are comments
+addi r0 -2 // these are comments
+addi r0 2 // these are comments
+st r0 r1 // these are comments
+ld r2 r1 // these are comments
 addi r2 1
 beq r1 0 10
 xor r1 r2
