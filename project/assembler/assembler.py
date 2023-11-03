@@ -81,7 +81,8 @@ def assemble_i_type(tokens, opcode, width):
 # Process J-Type
 def assemble_j_type(tokens, opcode):
     target = tokens[1]
-    return opcode + target
+    width = INSTRUCTION_FORMAT["j"]["width"]
+    return opcode + decode_value(target, width)
 
 # Convert assembly into machine code
 def assemble_instruction(instruction):

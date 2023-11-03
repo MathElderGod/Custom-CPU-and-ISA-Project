@@ -14,3 +14,8 @@ addi r3 3
 st r3 r2
 xor r2 r3
 st r2 r2
+j 20
+xor r0 r0
+xor r0 r0
+xor r0 r0
+st r0 r2
