@@ -4,7 +4,7 @@ import argparse
 Instruction            | Type | Opcode | rs   | rt   | rd   | imm    | target
 -----------------------|------|--------|------|------|------|--------|-------
 xor                    |  R   | 000    | XXX  | XXX  | -    | -      | -
-beq                    |  I   | 001    | XX   | -    | XX   | XX     | -
+beq                    |  I   | 001    | X    | -    | -    | XXXX   | -
 addi                   |  I   | 010    | XXX  | -    | -    | XXX    | -
 andi                   |  I   | 011    | XXX  | -    | -    | XXX    | -
 ls                     |  I   | 100    | XXX  | -    | -    | XXX    | -
