@@ -6,6 +6,9 @@ addi r0 2
 st r0 r1
 ld r2 r1
 addi r2 1
+beq r1 0 10
+xor r1 r2
+beq r1 1 12
 ls r2 -3
 ls r2 -3
 addi r3 2
@@ -14,7 +17,7 @@ addi r3 3
 st r3 r2
 xor r2 r3
 st r2 r2
-j 20
+j 23
 xor r0 r0
 xor r0 r0
 xor r0 r0

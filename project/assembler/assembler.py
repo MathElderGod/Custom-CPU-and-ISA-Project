@@ -63,8 +63,8 @@ def assemble_i_type(tokens, opcode, width):
     
     if len(tokens) == 4:
         if instruction == "beq":
-            imm = tokens[3]
-            return opcode + decode_value(rs, 1) + "0" + decode_value(imm, width)
+            imm, label = tokens[2], tokens[3]
+            return opcode + decode_value(rs, 1) + decode_value(imm, 1) + decode_value(label, 4)
             
         else:
             rd, imm = tokens[2], tokens[3]
