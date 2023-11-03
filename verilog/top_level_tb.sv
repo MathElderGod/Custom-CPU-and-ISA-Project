@@ -45,6 +45,18 @@ module top_level_tb;
         end else begin
             $display("PASS: core[0] from data memory does have the value %d.", test.dm1.core[0]);
         end 
+
+        if(test.dm1.core[192] != 3) begin
+            $display("Error: core[192] from data memory does not have the value 3. It has %d", test.dm1.core[192]);
+        end else begin
+            $display("PASS: core[192] from data memory does have the value %d.", test.dm1.core[192]);
+        end 
+
+        if(test.dm1.core[195] != 2) begin
+            $display("Error: core[195] from data memory does not have the value 2. It has %d", test.dm1.core[195]);
+        end else begin
+            $display("PASS: core[195] from data memory does have the value %d.", test.dm1.core[195]);
+        end 
          
         // End simulation
         $finish;
