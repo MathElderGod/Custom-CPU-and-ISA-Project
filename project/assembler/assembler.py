@@ -8,28 +8,28 @@ beq                    |  I   | 001    | XX   | -    | XX   | XX     | -
 addi                   |  I   | 010    | XXX  | -    | -    | XXX    | -
 andi                   |  I   | 011    | XXX  | -    | -    | XXX    | -
 ls                     |  I   | 100    | XXX  | -    | -    | XXX    | -
-ld                     |  I   | 101    | XX   | -    | XX   | XX     | -
-st                     |  I   | 110    | XX   | -    | XX   | XX     | -
+ld                     |  R   | 101    | XXX  | XXX  | -    | -      | -
+st                     |  R   | 110    | XXX  | XXX  | -    | -      | -
 j                      |  J   | 111    | -    | -    | -    | -      | XXXXXX
 """
 
 INSTRUCTION_FORMAT = {
-    "xor": {"type": "R", "opcode": "000", "width": 3},
-    "beq": {"type": "I", "opcode": "001", "width": 2},
+    "xor":  {"type": "R", "opcode": "000", "width": 3},
+    "beq":  {"type": "I", "opcode": "001", "width": 4},
     "addi": {"type": "I", "opcode": "010", "width": 3},
     "andi": {"type": "I", "opcode": "011", "width": 3},
-    "ls": {"type": "I", "opcode": "100", "width": 3},
-    "ld":  {"type": "I", "opcode": "101", "width": 2},
-    "st":  {"type": "I", "opcode": "110", "width": 2},
-    "j":   {"type": "J", "opcode": "111", "width": 6}
+    "ls":   {"type": "I", "opcode": "100", "width": 3},
+    "ld":   {"type": "I", "opcode": "101", "width": 3},
+    "st":   {"type": "I", "opcode": "110", "width": 3},
+    "j":    {"type": "J", "opcode": "111", "width": 6}
 }
 
 TWOS_COMP = {
-    '0': '000',
-    '1': '001',
-    '2': '010',
-    '3': '011',
-    '-3':'101',
+    '0':  '000',
+    '1':  '001',
+    '2':  '010',
+    '3':  '011',
+    '-3': '101',
     '-2': '110',
     '-1': '111'
 }
@@ -41,11 +41,12 @@ def tokenize_instruction(instruction):
 # Convert register or imm into binary
 def decode_value(value, width):
     try:
-        if value.startswith("r"):
-            value = value.replace("r", "")
+        if value.startswith("r"): value = value.replace("r", "")
         bin_value = format(int(value), f'0{width}b')
+        
         if len(bin_value) > width:
             raise ValueError(f"Value '{value}' too large for specified width of {width}.")
+        
         return bin_value
     
     except ValueError as ve:
@@ -58,18 +59,23 @@ def assemble_r_type(tokens, opcode, width):
 
 # Process the two types of I-Type instructions
 def assemble_i_type(tokens, opcode, width):
-    rs = tokens[1]
+    instruction, rs = tokens[0], tokens[1]
+    
     if len(tokens) == 4:
-        rd, imm = tokens[2], tokens[3]
-        return opcode + decode_value(rs, width) + decode_value(rd, width) + decode_value(imm, width)
+        if instruction == "beq":
+            imm = tokens[3]
+            return opcode + decode_value(rs, 1) + "0" + decode_value(imm, width)
+            
+        else:
+            rd, imm = tokens[2], tokens[3]
+            return opcode + decode_value(rs, width) + decode_value(rd, width) + decode_value(imm, width)
     else:
-        if (opcode == INSTRUCTION_FORMAT["ls"]["opcode"]) | (opcode == INSTRUCTION_FORMAT["addi"]["opcode"]):
-            imm = tokens[2]
+        imm = tokens[2]
+        if (instruction == "ls") | (instruction == "addi"):
             try: return opcode + decode_value(rs, width) + TWOS_COMP[imm]
             except: return opcode + decode_value(rs, width) + '000'
             
         else:
-            imm = tokens[2]
             return opcode + decode_value(rs, width) + decode_value(imm, width)
 
 # Process J-Type
@@ -82,8 +88,7 @@ def assemble_instruction(instruction):
     try:
         tokens = tokenize_instruction(instruction)
         op_info = INSTRUCTION_FORMAT.get(tokens[0])
-        if not op_info:
-            raise ValueError(f"Invalid instruction '{tokens[0]}'.")
+        if not op_info: raise ValueError(f"Invalid instruction '{tokens[0]}'.")
         
         opcode = op_info["opcode"]
         width = op_info["width"]
@@ -100,7 +105,7 @@ def assemble_instruction(instruction):
 def test_assembler():
     test_data = [
         ("xor r0 r1", "000000001"),
-        ("beq r1 r0 2", "001010010"),
+        ("beq r1 0 15", "001101111"),
         ("addi r0 1", "010000001"),
         ("andi r0 1", "011000001"),
         ("ls r0 -4", "100000000"),
@@ -111,14 +116,15 @@ def test_assembler():
         ("ls r0 1", "100000001"),
         ("ls r0 2", "100000010"),
         ("ls r0 3", "100000011"),
-        ("ld r0 r1 0", "101000100"),
-        ("st r0 r1 0", "110000100"),
+        ("ld r0 r1", "101000001"),
+        ("st r0 r1", "110000001"),
         ("j 000000", "111000000"),
         ("j 111111", "111111111")
     ]
 
     for instr, expected in test_data:
-        assert assemble_instruction(instr) == expected
+        result = assemble_instruction(instr)
+        assert result == expected, f"Test failed for instruction '{instr}'. Expected: '{expected}' and got: '{result}'"
 
     print("All tests passed.")
 
