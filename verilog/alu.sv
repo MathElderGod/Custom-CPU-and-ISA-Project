@@ -16,18 +16,30 @@ module alu(
     localparam stIns = 3'b110;
     localparam jIns = 3'b111;
     always_comb begin
-        zero = (result == 8'b00000000);
         case(instruction)
             // bitwise xor
-            xorIns: result = input1 ^ input2;
+            xorIns: begin
+                result = input1 ^ input2;
+                zero = 'b0;
+            end
             // branch if equal
-            beqIns: result = (input1 == input2) ? 8'b00000000: 8'b00000001;
+            beqIns: begin
+                result = (input1 == input2) ? 8'b00000000: 8'b00000001;
+                zero = !result;
+            end
             // add immediate
-            addiIns: result = input1 + input2;
+            addiIns: begin
+                result = input1 + input2;
+                zero = 'b0;
+            end
             // bitwise and
-            andiIns: result = input1 & input2;
+            andiIns: begin
+                result = input1 & input2;
+                zero = 'b0;
+            end
             // logical shift
             lsIns: begin
+                zero = 'b0;
                 case(input2[2:0]) // considering only 3 LSBs of input2
                     3'b001: result = input1 >> 1;    // 1-bit shift-right
                     3'b010: result = input1 >> 2;    // 2-bit shift-right
@@ -40,8 +52,14 @@ module alu(
                 endcase
             end
             // the instruction is not supported
-            stIns: result = input1;
-            default: result = 8'b11111111;
+            stIns: begin
+                result = input1;
+                zero = 'b0;
+            end
+            default: begin
+                result = 8'b11111111;
+                zero = 'b0;
+            end
         endcase
     end
 endmodule
