@@ -12,8 +12,8 @@ parameter D = 10,   // program counter width
           mcodebits = 3;
 
 wire jumpEn;
-wire[D-1:0] targetAddress,  // target address used for jumping or branching
-            programCounter; // current programCounter
+reg  [D-1:0] targetAddress;  // target address used for jumping or branching
+wire [D-1:0] programCounter; // current programCounter
 
 wire[8:0] currentInstruction;    // the current machine instruction outputted by the instruction ROM
 
@@ -62,7 +62,15 @@ always @(*) begin
     endcase
 end
 
-assign jumpEn = (zeroFlag && (aluOpSignal == 3'b001)) || (aluOpSignal == 3'b111) && (!start);
+assign jumpEn = ((zeroFlag && (branchSignal)) || (aluOpSignal == 3'b111)) && (!start);
+
+always @(*) begin
+  case(aluOpSignal)
+    beqIns: targetAddress =  currentInstruction[3:0];
+    jIns: targetAddress = currentInstruction[5:0];
+    default: targetAddress = programCounter;
+  endcase
+end
 
 // program counter module // D sets program counter width
 pc #(.D(D)) pc1(
@@ -129,6 +137,6 @@ data_mem dm1 (
 
 assign writeData = memToRegSignal ? dataMemoryOutput : aluResult;
 
-  // can be a ternary string assign done = (programCounter == program1size) ? 1 : ((programCounter == program2size ? 1: (programCounter == program2size) ? 1: 0);
-  assign done =  (programCounter >= 6) ? 1 : ( (programCounter == 800) ? 1 : ((programCounter == 450) ? 1: 0));
+// can be a ternary string assign done = (programCounter == program1size) ? 1 : ((programCounter == program2size ? 1: (programCounter == program2size) ? 1: 0);
+assign done =  (programCounter >= 24) ? 1 : ( (programCounter == 800) ? 1 : ((programCounter == 450) ? 1: 0));
 endmodule
