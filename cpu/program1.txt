@@ -1,0 +1,166 @@
+xor r0 r0 // this is a no op
+addi r0 1 // r0 now has         0000 0001
+ls r0 -1  // r0 now has         0000 0010
+addi r0 1 // r0 now has         0000 0011
+ls r0 -1  // r0 now has         0000 0110
+addi r0 1 // r0 now has         0000 0111
+ls r0 -2  // r0 now has         0001 1100
+addi r0 1 // r0 now has         0001 1101 // desired result for r1 is 29  0001 1101
+addi r1 1 // r1 now has         0000 0001
+ls r1 -1  // r1 now has         0000 0010
+addi r1 1 // r1 now has         0000 0011
+ls r1 -1  // r1 now has         0000 0110
+addi r1 1 // r1 now has         0000 0111
+ls r1 -2  // r1 now has         0001 1100
+addi r1 1 // r1 now has         0001 1101
+ls r1 -1  // r1 now has         0011 1010
+addi r1 1 // r1 now has         0011 1011  // desired result for r1 is 59  0011 1011
+ld r2 r0  // r2 now has the contents of DM[29]
+ls r2 2     // r2 now has 0000 000X... aka bit position 11
+xor r4 r2   // r4 now has 0000 000X... aka bit position 11
+xor r5 r2   // r5 now has 0000 000X... aka bit position 11
+xor r6 r2   // r6 now has 0000 000X... aka bit position 11
+xor r7 r2   // r7 now has 0000 000X... aka bit position 11
+ld r3 r0    // r3 now has the contents of DM[29]
+ls r3 1     // r3 now has the 10th bit as its lsb
+andi r3 1   // isolate that lsb
+xor r2 r3   // r2 is now b11^b10
+xor r4 r3   // r4 is now b11^b10
+xor r5 r3   // r5 is now b11^b10
+xor r7 r3   // r7 is now b11^b10
+ld r3 r0    // r3 now has the contents of DM[29]
+andi r3 1   // isolate that lsb. r3 has the 9th bit
+xor r2 r3   // r2 is now b11^b10^b9
+xor r4 r3   // r4 is now b11^b10^b9
+xor r6 r3   // r6 is now b11^b9
+xor r7 r3   // r7 is now b11^b10^b9
+addi r0 -1  // r0 now has the value 28
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 3
+ls r3 3
+ls r3 1     // the msb should now be the lsb : r3 now has the 8th bit
+xor r2 r3   // r2 is now b11^b10^b9^b8
+xor r4 r3   // r4 is now b11^b10^b9^b8
+xor r7 r3   // r7 is now b11^b10^b9^b8
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 3
+ls r3 3     // r3 now has the 7th bit positon
+andi r3 1   // isolate that lsb
+xor r2 r3   // r2 is now b11^b10^b9^b8^b7
+xor r5 r3   // r5 is now b11^b10^b7
+xor r6 r3   // r6 is now b11^b9^b7
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 3
+ls r3 2     // r3 now has the 6th bit positon
+andi r3 1   // isolate that lsb
+xor r2 r3   // r2 is now b11^b10^b9^b8^b7^b6
+xor r5 r3   // r5 is now b11^b10^b7^b6
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7^b6
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 3
+ls r3 1     // r3 now has the 5th bit positon
+andi r3 1   // isolate that lsb
+xor r2 r3   // r2 is now b11^b10^b9^b8^b7^b6^b5 ****** PARITY 8 COMPLETE!! ******
+xor r6 r3   // r6 is now b11^b9^b7^b5
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7^b6^b5
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 3     // r3 now has the 4th bit positon
+andi r3 1   // isolate that lsb
+xor r4 r3   // r4 is now b11^b10^b9^b8^b4
+xor r5 r3   // r5 is now b11^b10^b7^b6^b4
+xor r6 r3   // r6 is now b11^b9^b7^b5^b4
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7^b6^b5^b4
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 2     // r3 now has the 3rd bit positon
+andi r3 1   // isolate that lsb
+xor r4 r3   // r4 is now b11^b10^b9^b8^b4^b3
+xor r5 r3   // r5 is now b11^b10^b7^b6^b4^b3
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7^b6^b5^b4^b3
+ld r3 r0    // r3 now has the contents of DM[28]
+ls r3 1     // r3 now has the 2nd bit positon
+andi r3 1   // isolate that lsb
+xor r4 r3   // r4 is now b11^b10^b9^b8^b4^b3^b2 ****** PARITY 4 COMPLETE!! ******
+xor r6 r3   // r6 is now b11^b9^b7^b5^b4^b2
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7^b6^b5^b4^b3^b2
+ld r3 r0    // r3 now has the contents of DM[28]
+andi r3 1   // isolate that lsb. r3 has the 1st bit
+xor r5 r3   // r5 is now b11^b10^b7^b6^b4^b3^b1 ****** PARITY 2 COMPLETE!! ******
+xor r6 r3   // r6 is now b11^b9^b7^b5^b4^b2^b1 ****** PARITY 1 COMPLETE!! ******
+xor r7 r3   // r7 is now b11^b10^b9^b8^b7^b6^b5^b4^b3^b2^b1
+addi r0 1   // r0 now has 29 again
+xor r7 r2   //register 7 has all the xored bits ^ r2 = r2
+xor r7 r4   // bits ^ r2 ^ r4
+xor r7 r5   // bits ^ r2 ^ r4 ^ r5
+xor r7 r6   // r7 = bits ^ r2 ^ r4 ^ r5 ^ r6 ****** PARITY 0 COMPLETE!! ******
+st r7 r1    // store this parity bit at M[r1]
+ld r3 r0    // r3 now has the contents of DM[29]
+ls r3 -1    // r3 is now 0000 XXX0
+addi r0 -1  // r0 now has the value 28
+ld r7 r0    // r7 now has the contents of DM[28]
+ls r7 3     
+ls r7 3     
+ls r7 1     // r7 now has the 8th bit
+xor r3 r7   // r3 now has 0000 XXXX
+ls r3 -1    // r3 is now 000X XXX0
+ld r7 r0    // r7 now has the contents of DM[28]
+ls r7 3     
+ls r7 3     // r7 now has the 7th bit
+andi r7 1   // isolate that lsb
+xor r3 r7   // r3 now has 000X XXXX
+ls r3 -1    // r3 is now 00XX XXX0
+ld r7 r0    // r7 now has the contents of DM[28]
+ls r7 3     
+ls r7 2     // r7 now has the 6th bit
+andi r7 1   // isolate that lsb
+xor r3 r7   // r3 now has 00XX XXXX
+ls r3 -1    // r3 is now 0XXX XXX0
+ld r7 r0    // r7 now has the contents of DM[28]
+ls r7 3     
+ls r7 1     // r7 now has the 5th bit
+andi r7 1   // isolate that lsb
+xor r3 r7   // r3 now has 0XXX XXXX
+ls r3 -1    // r3 is now XXXX XXX0
+xor r3 r2   // r3 is now B11 B10 B9 B8  B7 B6 B5 P8   *** FIRST BYTE COMPLETE ***
+xor r2 r2   // clear the register 2 for extra register memory
+ld r7 r1    // extract parity 0 from memory
+st r3 r1    // store this string result into the M[r1] (59)
+addi r1 -1  // reduce the memory address by 1. (want to store the next string at address 58)
+xor r3 r3   // clear r3, it now has 0000 0000 
+ld r2 r0    // r2 now has the contents of DM[28]
+ls r2 3     // r2 now has the 4th bit
+andi r2 1   // isolate that lsb
+xor r3 r2   // r3 now has 0000 000X
+ls r3 -1    // r3 is now 0000 00X0
+ld r2 r0    // r2 now has the contents of DM[28]
+ls r2 2     // r2 now has the 3rd bit
+andi r2 1   // isolate that lsb
+xor r3 r2   // r3 now has 0000 00XX
+ls r3 -1    // r3 is now 0000 0XX0
+ld r2 r0    // r2 now has the contents of DM[28]
+ls r2 1     // r2 now has the 2nd bit
+andi r2 1   // isolate that lsb
+xor r3 r2   // r3 now has 0000 0XXX
+ls r3 -1    // r3 is now 0000 XXX0
+xor r3 r4   // r3 is now 0000 b4b3b2p4
+ls r3 -1    // r3 is now 000X XXX0
+ld r2 r0    // r2 now has the contents of DM[28]
+andi r2 1   // isolate that lsb
+xor r3 r2   // 000b4 b3b2p4b1
+ls r3 -1    // r3 is now 00XX XXX0
+xor r3 r5   // r3 is now 00b4b3 b2p4b1p2
+ls r3 -1
+xor r3 r6   // r3 is now 0b4b3b2 p4b1p2p1
+ls r3 -1
+xor r3 r7   // r3 is now b4b3b2p4 b1p2p1p0
+st r3 r1    // store this string result into the M[r1]
+beq r0 0 10
+addi r0 -1  // decrement the count of our core by 1...should be 27 next iteration
+addi r1 -1  // we want to start storing things at one address down.
+xor r2 r2
+xor r3 r3
+xor r4 r4
+xor r5 r5
+xor r6 r6
+xor r7 r7
+j 17
