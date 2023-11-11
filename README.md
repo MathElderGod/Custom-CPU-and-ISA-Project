@@ -38,7 +38,7 @@ This project encompasses a set of SystemVerilog files designed for a hardware de
 - **Key Functions:** Orchestrating interactions between modules, ensuring coherent data flow and control.
 
 ## Usage
-To use these files, load them into a SystemVerilog-compatible simulation or synthesis tool. Ensure all dependencies and environment settings are correctly configured. Compile and run simulations as per the tool's instructions. MAKE SURE YOU EDIT THE TOP-LEVEL FILE AND THE INSTRUCTIONS WITH BEFORE USE. Some done flags are commented out due to interference with other programs. Also, ensure the instruction ROM is reading from the correct file and the correct pathway. 
+To use these files, load them into a SystemVerilog-compatible simulation or synthesis tool. Ensure all dependencies and environment settings are correctly configured. Compile and run simulations as per the tool's instructions. MAKE SURE YOU EDIT THE TOP-LEVEL FILE AND THE INSTRUCTION ROM BEFORE USE. Some done flags are commented out due to interference with other programs. Also, ensure the instruction ROM is reading from the correct file and the correct pathway. MAKE SURE YOU HAVE THE CORRECT DONE FLAG SET FOR THE SPECIFIED PROGRAM YOU WISH TO RUN, OR YOU WILL RUN INTO UNEXPECTED BEHAVIOR!
 
 ## Overview
 This section of the project includes various files related to assembly language programming and machine code generation. These files may be used for writing, assembling, and testing assembly language programs.
