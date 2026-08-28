@@ -3,7 +3,7 @@
 ## Overview
 This project encompasses a set of SystemVerilog files designed for a hardware design and verification project. These files contribute to various aspects of a digital system, including logic operations, control mechanisms, memory management, and testing.
 
-[📄 View Project Report](./CSE_141L_Project.pdf)
+[📄 Download Project Report](https://github.com/MathElderGod/Custom-CPU-and-ISA-Project/blob/main/CSE_141L_Project.pdf)
 
 ## File Descriptions for CPU Directory
 
